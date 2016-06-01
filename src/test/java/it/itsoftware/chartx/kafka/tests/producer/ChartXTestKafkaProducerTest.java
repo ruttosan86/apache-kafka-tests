@@ -7,11 +7,13 @@ import java.util.Properties;
 import org.junit.Test;
 
 import it.itsoftware.chartx.kafka.tests.ChartX;
-import it.itsoftware.chartx.kafka.tests.data.FileTickDataSource;
-import it.itsoftware.chartx.kafka.tests.data.TickDataFactory;
+import it.itsoftware.chartx.kafka.tests.data.old.FileTickDataSource;
+import it.itsoftware.chartx.kafka.tests.data.old.TickDataFactory;
+import it.itsoftware.chartx.kafka.tests.producer.old.ChartXTestKafkaProducer;
 
 public class ChartXTestKafkaProducerTest {
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void test() {
 		System.out.println("New datasource");

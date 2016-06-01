@@ -1,4 +1,4 @@
-package it.itsoftware.chartx.kafka.tests.data;
+package it.itsoftware.chartx.kafka.tests.data.old;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+@Deprecated
 public class FileTickDataSource implements TickDataSource {
 
 	private static final String FILENAME = "/home/ruttosan/WORK/Progetti/ITSoftware/chartX/TICK_BY_TICK_UK.csv";

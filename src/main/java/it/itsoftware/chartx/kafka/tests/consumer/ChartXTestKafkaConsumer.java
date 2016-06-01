@@ -34,7 +34,6 @@ public class ChartXTestKafkaConsumer {
 
 	public void consume(Duration d) {
 		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-		
 		TypeToken<Map<String, Object>> typeToken = new TypeToken<Map<String, Object>>() {
 			private static final long serialVersionUID = 1L;
 		};

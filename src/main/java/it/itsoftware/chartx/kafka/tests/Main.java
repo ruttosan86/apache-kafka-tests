@@ -1,6 +1,6 @@
 package it.itsoftware.chartx.kafka.tests;
 
-import it.itsoftware.chartx.kafka.tests.data.FileTickDataSource;
+import it.itsoftware.chartx.kafka.tests.data.old.FileTickDataSource;
 
 public class Main {
 

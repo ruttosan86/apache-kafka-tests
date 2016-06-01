@@ -1,4 +1,4 @@
-package it.itsoftware.chartx.kafka.tests.producer;
+package it.itsoftware.chartx.kafka.tests.producer.old;
 
 import java.util.Map;
 import java.util.Properties;
@@ -9,7 +9,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import com.google.gson.Gson;
 
-import it.itsoftware.chartx.kafka.tests.data.TickDataSource;
+import it.itsoftware.chartx.kafka.tests.data.old.TickDataSource;
 
 public class ChartXTestKafkaProducer {
 

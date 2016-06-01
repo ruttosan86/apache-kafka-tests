@@ -1,9 +1,10 @@
 package it.itsoftware.chartx.kafka.tests.data;
 
 import static org.junit.Assert.*;
-import it.itsoftware.chartx.kafka.tests.data.FileTickDataSource;
 
 import org.junit.Test;
+
+import it.itsoftware.chartx.kafka.tests.data.old.FileTickDataSource;
 
 public class FileTickDataSourceTest {
 

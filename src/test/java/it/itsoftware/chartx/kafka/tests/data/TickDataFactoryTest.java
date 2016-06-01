@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import it.itsoftware.chartx.kafka.tests.data.old.FileTickDataSource;
+import it.itsoftware.chartx.kafka.tests.data.old.TickDataFactory;
+
 public class TickDataFactoryTest {
 
 	@Test

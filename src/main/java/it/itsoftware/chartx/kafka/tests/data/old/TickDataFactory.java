@@ -1,4 +1,4 @@
-package it.itsoftware.chartx.kafka.tests.data;
+package it.itsoftware.chartx.kafka.tests.data.old;
 
 import java.util.Map;
 
@@ -6,6 +6,7 @@ import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
 
+@Deprecated
 public class TickDataFactory implements TickDataSource {
 
 	private TickDataSource datasource;
