@@ -18,6 +18,7 @@ package it.itsoftware.chartx.kafka.tests.consumer;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -35,22 +36,27 @@ public class KafkaTickConsumerRunner extends Thread {
 	private final KafkaConsumer<String, String> consumer;
 	private TickOutput output;
 	private Gson gson;
-	private String destinationTopic;
+	private String sourceTopic;
 	
-	public KafkaTickConsumerRunner(Properties props, TickOutput output) {
+	final static Logger logger = Logger.getLogger("KafkaTickConsumerRunner");
+	
+	public KafkaTickConsumerRunner(Properties props, TickOutput output, String sourceTopic) {
 		super();
 		this.consumer = new KafkaConsumer<String, String>(props);
 		this.output = output;
+		this.sourceTopic = sourceTopic;
 		this.gson = new Gson();
 	}
 
 	@Override
 	public void run() {
 		try {
-            consumer.subscribe(Arrays.asList(destinationTopic));
+			logger.info("Starting consumer.");
+            consumer.subscribe(Arrays.asList(sourceTopic));
             output.open();
             while (!closed.get()) {
             	ConsumerRecords<String, String> records = consumer.poll(250);
+            	logger.info("Retrieved " + records.count() + " ticks.");
             	for (ConsumerRecord<String, String> record : records) {
             		Tick tick = gson.fromJson(record.value(), Tick.class);
             		if(tick != null) {
@@ -62,6 +68,7 @@ public class KafkaTickConsumerRunner extends Thread {
             // Ignore exception if closing
             if (!closed.get()) throw e;
         } finally {
+        	logger.info("Closing consumer and output..");
         	output.close();
             consumer.close();
         }
@@ -69,6 +76,7 @@ public class KafkaTickConsumerRunner extends Thread {
 	}
 
 	public void shutdown() {
+		logger.info("Shutdown requested.");
 		closed.set(true);
 		consumer.wakeup();
 	}
