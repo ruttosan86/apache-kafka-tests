@@ -35,9 +35,9 @@ public class ProducerMain {
 		String topic = "ticks";
 		TickSource source = new SimulatedTickSource(100);
 		KafkaTickProducer producer = new KafkaTickProducer(source, topic, KafkaTickProducer.defaultProperties());
-		int nMessages = 100;
+		int nMessages = 2500;
 		boolean asyncSend = true;
-		int executionTime = 60; // time in seconds for data production
+		int executionTime = 120; // time in seconds for data production
 
 		Stopwatch exitTimer = Stopwatch.createStarted();
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

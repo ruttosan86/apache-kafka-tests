@@ -71,6 +71,7 @@ public class KafkaTickConsumerRunner extends Thread {
         	logger.info("Closing consumer and output..");
         	output.close();
             consumer.close();
+            logger.info("Closing done.");
         }
 
 	}

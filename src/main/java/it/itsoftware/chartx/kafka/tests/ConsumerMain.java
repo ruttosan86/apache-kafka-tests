@@ -36,7 +36,7 @@ public class ConsumerMain {
 		if(output.open()) {
 			KafkaTickConsumer consumer = new KafkaTickConsumer(KafkaTickConsumer.defaultProperties(), topic, output);
 			if(consumer.start()) {
-				Thread.sleep(60000);
+				Thread.sleep(150000);
 				consumer.stop();
 			}
 			
