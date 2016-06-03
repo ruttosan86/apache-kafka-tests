@@ -23,8 +23,8 @@ import it.itsoftware.chartx.kafka.tests.data.output.TickOutput;
 public class ConsumerMain {
 
 	public static void main(String[] args) throws InterruptedException {
-		String topic = "ticks";
-		boolean influx = true;
+		String topic = "ticks2";
+		boolean influx = false;
 		TickOutput output = null;
 		if(influx) {
 			output = new InfluxDBTickOutput("http://localhost:8086", "root", "root", "dbkafkatest", "default",

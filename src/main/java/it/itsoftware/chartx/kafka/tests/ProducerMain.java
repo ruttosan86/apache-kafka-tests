@@ -32,7 +32,7 @@ public class ProducerMain {
 
 	public static void main(String[] args) {
 
-		String topic = "ticks";
+		String topic = "ticks2";
 		TickSource source = new SimulatedTickSource(100);
 		KafkaTickProducer producer = new KafkaTickProducer(source, topic, KafkaTickProducer.defaultProperties());
 		int nMessages = 2500;

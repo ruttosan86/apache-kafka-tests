@@ -24,10 +24,9 @@ import java.util.logging.Logger;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-
-import com.google.gson.Gson;
 
 import it.itsoftware.chartx.kafka.tests.data.Tick;
 import it.itsoftware.chartx.kafka.tests.data.source.TickSource;
@@ -35,10 +34,9 @@ import it.itsoftware.chartx.kafka.tests.data.source.TickSource;
 public class KafkaTickProducer {
 
 	private TickSource source;
-	private Gson gson;
 	private String destinationTopic;
 	private Properties props;
-	private Producer<String, String> producer;
+	private Producer<String, Tick> producer;
 	private ArrayBlockingQueue<Tick> rejectedTicks;
 	private boolean productionAborted;
 
@@ -51,7 +49,6 @@ public class KafkaTickProducer {
 		this.source = source;
 		this.destinationTopic = destinationTopic;
 		this.props = props;
-		gson = new Gson();
 		rejectedTicks = new ArrayBlockingQueue<Tick>(MAX_QUEUE_SIZE);
 		producer = null;
 	}
@@ -87,8 +84,8 @@ public class KafkaTickProducer {
 	}
 
 	private void sendAsync(Tick tick) {
-		ProducerRecord<String, String> record = new ProducerRecord<String, String>(destinationTopic, tick.getTopic(),
-				gson.toJson(tick));
+		ProducerRecord<String, Tick> record = new ProducerRecord<String, Tick>(destinationTopic, tick.getTopic(),
+				tick);
 		producer.send(record, (meta, error) -> {
 			if (error != null) {
 				logger.severe("Unable to send tick:\n" + error.getMessage());
@@ -103,8 +100,8 @@ public class KafkaTickProducer {
 	}
 
 	private void sendSync(Tick tick) {
-		ProducerRecord<String, String> record = new ProducerRecord<String, String>(destinationTopic, tick.getTopic(),
-				gson.toJson(tick));
+		ProducerRecord<String, Tick> record = new ProducerRecord<String, Tick>(destinationTopic, tick.getTopic(),
+				tick);
 		Future<RecordMetadata> future = producer.send(record);
 		try {
 			future.get();
@@ -121,7 +118,7 @@ public class KafkaTickProducer {
 
 	private void open() {
 		if (producer == null) {
-			producer = new KafkaProducer<String, String>(props);
+			producer = new KafkaProducer<String, Tick>(props);
 		}
 	}
 
@@ -140,7 +137,7 @@ public class KafkaTickProducer {
 		props.put("batch.size", 16384);
 		props.put("linger.ms", 1);
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-		props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "it.itsoftware.chartx.kafka.tests.data.serde.TickJSONSerializer");
 		return props;
 	}
 
