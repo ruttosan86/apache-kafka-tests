@@ -37,6 +37,7 @@ Some experiments uses topic "ticks2", just check the code beforehand for the rig
 ### Install Influxdb *
 
 *you need to do this only if you intend to use the "influxdbtickoutput" class (or if you want to run the tests..)
+
 Google it :D
 
 #### Create database dbkafkatest
