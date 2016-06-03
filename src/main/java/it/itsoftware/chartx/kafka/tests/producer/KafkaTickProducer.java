@@ -131,12 +131,12 @@ public class KafkaTickProducer {
 
 	public static Properties defaultProperties() {
 		Properties props = new Properties();
-		props.put("bootstrap.servers", "localhost:9192");
-		props.put("acks", "1");
-		props.put("retries", 0);
-		props.put("batch.size", 16384);
-		props.put("linger.ms", 1);
-		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9192");
+		props.put(ProducerConfig.ACKS_CONFIG, "1");
+		props.put(ProducerConfig.RETRIES_CONFIG, 0);
+		props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+		props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "it.itsoftware.chartx.kafka.tests.data.serde.TickJSONSerializer");
 		return props;
 	}

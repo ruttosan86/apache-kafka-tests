@@ -18,6 +18,8 @@ package it.itsoftware.chartx.kafka.tests.consumer;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+
 import it.itsoftware.chartx.kafka.tests.data.output.TickOutput;
 
 public class KafkaTickConsumer {
@@ -69,13 +71,13 @@ public class KafkaTickConsumer {
 	
 	public static Properties defaultProperties() {
 		Properties props = new Properties();
-		props.put("bootstrap.servers", "localhost:9192");
-		props.put("group.id", "None");
-		props.put("enable.auto.commit", "true");
-		props.put("auto.commit.interval.ms", "1000");
-		props.put("session.timeout.ms", "30000");
-		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-		props.put("value.deserializer", "it.itsoftware.chartx.kafka.tests.data.serde.TickJSONDeserializer");
+		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9192");
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, "chartXconsumer");
+		props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+		props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+		props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
+		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "it.itsoftware.chartx.kafka.tests.data.serde.TickJSONDeserializer");
 		return props;
 	}
 
