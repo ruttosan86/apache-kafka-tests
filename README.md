@@ -4,8 +4,8 @@ First attempts at using apache kafka (consumers-producers-streams)
 
 To use you'll need:
 
--Linux (tested with Ubuntu 15.10 x64)
--Java (Oracle JDK 8 or OpenJDK8)
+- Linux (tested with Ubuntu 15.10 x64)
+- Java (Oracle JDK 8 or OpenJDK8)
 
 ## Before launching
 
