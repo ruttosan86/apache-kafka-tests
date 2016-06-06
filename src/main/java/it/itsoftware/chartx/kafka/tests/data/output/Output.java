@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.itsoftware.chartx.kafka.tests.data.serde;
 
-import it.itsoftware.chartx.kafka.tests.data.Tick;
+package it.itsoftware.chartx.kafka.tests.data.output;
 
-public class TickJSONDeserializer extends JSONDeserializer<Tick>{
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-	public TickJSONDeserializer() {
-		super(Tick.class);
-	}
-	
+public interface Output<K, T> {
+
+	public void write(ConsumerRecord<K, T> record);
+
+	public boolean open();
+
+	public boolean close();
+
 }

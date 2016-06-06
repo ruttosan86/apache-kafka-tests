@@ -20,19 +20,19 @@ import java.util.logging.Logger;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 
-import it.itsoftware.chartx.kafka.tests.data.output.TickOutput;
+import it.itsoftware.chartx.kafka.tests.data.output.Output;
 
-public class KafkaTickConsumer {
+public class MyKafkaConsumer<K, T> {
 	
 	final static Logger logger = Logger.getLogger("KafkaTickConsumer");
 	
 	private Properties props;
 	private String sourceTopic;
-	private TickOutput output;
-	private KafkaTickConsumerRunner consumer;
+	private Output<K, T> output;
+	private KafkaConsumerRunner<K, T> consumer;
 	private boolean started;
 	
-	public KafkaTickConsumer(Properties props, String sourceTopic, TickOutput output) {
+	public MyKafkaConsumer(Properties props, String sourceTopic, Output<K, T> output) {
 		super();
 		this.props = props;
 		this.sourceTopic = sourceTopic;
@@ -45,7 +45,7 @@ public class KafkaTickConsumer {
 		if(started) {
 			return false;
 		}
-		consumer = new KafkaTickConsumerRunner(props, output, sourceTopic);
+		consumer = new KafkaConsumerRunner<K, T>(props, output, sourceTopic);
 		consumer.start();
 		started = true;
 		return true;
@@ -66,18 +66,22 @@ public class KafkaTickConsumer {
 			logger.severe("Failed to stop the consumer. - " + e.getMessage());
 			return false;
 		}
+		
 	}
 	
+	public static Properties defaultProperties(String valueDeserializer) {
+		return defaultProperties("org.apache.kafka.common.serialization.StringDeserializer", valueDeserializer);
+	}
 	
-	public static Properties defaultProperties() {
+	public static Properties defaultProperties(String keyDeserializer, String valueDeserializer) {
 		Properties props = new Properties();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9192");
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, "chartXconsumer");
 		props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
 		props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
 		props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
-		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "it.itsoftware.chartx.kafka.tests.data.serde.TickJSONDeserializer");
+		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, keyDeserializer);
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializer);
 		return props;
 	}
 

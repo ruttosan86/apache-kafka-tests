@@ -15,12 +15,11 @@
  */
 package it.itsoftware.chartx.kafka.tests.data.serde;
 
-import it.itsoftware.chartx.kafka.tests.data.Tick;
+import it.itsoftware.chartx.kafka.tests.data.TickAggregation;
 
-public class TickJSONDeserializer extends JSONDeserializer<Tick>{
+public class TickAggregationJSONDeserializer extends JSONDeserializer<TickAggregation> {
 
-	public TickJSONDeserializer() {
-		super(Tick.class);
+	public TickAggregationJSONDeserializer() {
+		super(TickAggregation.class);
 	}
-	
 }

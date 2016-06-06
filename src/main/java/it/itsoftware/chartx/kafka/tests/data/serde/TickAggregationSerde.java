@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package it.itsoftware.chartx.kafka.tests.data.serde;
 
-package it.itsoftware.chartx.kafka.tests.data.output;
+import it.itsoftware.chartx.kafka.tests.data.TickAggregation;
 
-import it.itsoftware.chartx.kafka.tests.data.Tick;
+public class TickAggregationSerde extends JSONSerde<TickAggregation> {
 
-public interface TickOutput {
-	
-	public void write(Tick tick);
-	
-	public boolean open();
-	
-	public boolean close();
+	public TickAggregationSerde() {
+		super(TickAggregation.class);
+	}
 
 }

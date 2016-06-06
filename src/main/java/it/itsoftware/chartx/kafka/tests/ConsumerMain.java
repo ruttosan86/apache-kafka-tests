@@ -15,26 +15,32 @@
  */
 package it.itsoftware.chartx.kafka.tests;
 
-import it.itsoftware.chartx.kafka.tests.consumer.KafkaTickConsumer;
-import it.itsoftware.chartx.kafka.tests.data.output.ConsoleTickOutput;
-import it.itsoftware.chartx.kafka.tests.data.output.InfluxDBTickOutput;
-import it.itsoftware.chartx.kafka.tests.data.output.TickOutput;
+import java.util.Properties;
+
+import org.apache.kafka.streams.kstream.Windowed;
+
+import it.itsoftware.chartx.kafka.tests.consumer.MyKafkaConsumer;
+import it.itsoftware.chartx.kafka.tests.data.TickAggregation;
+import it.itsoftware.chartx.kafka.tests.data.output.ConsoleOutput;
+import it.itsoftware.chartx.kafka.tests.data.output.Output;
 
 public class ConsumerMain {
 
 	public static void main(String[] args) throws InterruptedException {
-		String topic = "ticks2";
-		boolean influx = false;
-		TickOutput output = null;
-		if(influx) {
-			output = new InfluxDBTickOutput("http://localhost:8086", "root", "root", "dbkafkatest", "default",
-					"ticks");
-			((InfluxDBTickOutput) output).enableBatch(2000);
-		} else {
-			output = new ConsoleTickOutput();
-		}
+		String topic = "aggregateTicks";
+//		boolean influx = false;
+		Output<Windowed<String>, TickAggregation> output = null;
+//		if(influx) {
+//			output = new InfluxDBTickOutput("http://localhost:8086", "root", "root", "dbkafkatest", "default",
+//					"ticks");
+//			((InfluxDBTickOutput) output).enableBatch(2000);
+//		} else {
+			output = new ConsoleOutput<Windowed<String>, TickAggregation>();
+//		}
 		if(output.open()) {
-			KafkaTickConsumer consumer = new KafkaTickConsumer(KafkaTickConsumer.defaultProperties(), topic, output);
+			Properties props = MyKafkaConsumer.defaultProperties("it.itsoftware.chartx.kafka.tests.data.serde.WindowedStringDeserializer", "it.itsoftware.chartx.kafka.tests.data.serde.TickAggregationJSONDeserializer");
+			
+			MyKafkaConsumer<Windowed<String>, TickAggregation> consumer = new MyKafkaConsumer<Windowed<String>, TickAggregation>(props, topic, output);
 			if(consumer.start()) {
 				Thread.sleep(150000);
 				consumer.stop();

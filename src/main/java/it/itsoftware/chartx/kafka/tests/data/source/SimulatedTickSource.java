@@ -48,7 +48,7 @@ public class SimulatedTickSource implements TickSource {
 		Float last_prc = newPrice();
 		Integer trade_num = newTradeNum();
 		Float best_ask = newPrice();
-		Long time = Instant.now().toEpochMilli() * 1000000; //NANOSECOND TIMESTAMP
+		Long time = Instant.now().toEpochMilli(); //MILLISECOND TIMESTAMP
 		Float best_bid = newPrice();
 		Boolean automatic_type = newAutomaticType();
 		Tick t = new Tick(topic, time, contractId, last_prc, best_bid, best_ask, trade_num, automatic_type);

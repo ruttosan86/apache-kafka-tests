@@ -17,12 +17,14 @@ package it.itsoftware.chartx.kafka.tests.data.output;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
 import it.itsoftware.chartx.kafka.tests.data.Tick;
 
-public class InfluxDBTickOutput implements TickOutput {
+
+public class InfluxDBTickOutput implements Output<String, Tick> {
 
 	private InfluxDB db;
 	private String dbURL;
@@ -50,11 +52,11 @@ public class InfluxDBTickOutput implements TickOutput {
 	}
 
 	@Override
-	public void write(Tick tick) {
+	public void write(ConsumerRecord<String,Tick> record) {
 		if(closed) {
 			open();
 		}
-		db.write(destinationDatabase, destinationRP, tick.toPoint(destinationMeasurement));
+		db.write(destinationDatabase, destinationRP, record.value().toPoint(destinationMeasurement));
 	}
 
 	@Override

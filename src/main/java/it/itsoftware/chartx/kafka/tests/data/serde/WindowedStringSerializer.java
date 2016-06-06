@@ -15,12 +15,15 @@
  */
 package it.itsoftware.chartx.kafka.tests.data.serde;
 
-import it.itsoftware.chartx.kafka.tests.data.Tick;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.streams.kstream.internals.WindowedSerializer;
 
-public class TickJSONDeserializer extends JSONDeserializer<Tick>{
+public class WindowedStringSerializer extends WindowedSerializer<String> {
 
-	public TickJSONDeserializer() {
-		super(Tick.class);
-	}
+	private static final StringSerializer STRING_SERIALIZER = new StringSerializer();
 	
+	public WindowedStringSerializer() {
+		super(STRING_SERIALIZER);
+	}
+
 }

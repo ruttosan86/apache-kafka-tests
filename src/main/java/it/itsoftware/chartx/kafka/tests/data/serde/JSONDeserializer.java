@@ -46,6 +46,10 @@ public class JSONDeserializer<T> implements Deserializer<T> {
 	@Override
 	public T deserialize(String topic, byte[] data) {
 		try {
+			if(data == null) {
+				logger.warning("NULL DATA for topic \"" + topic + "\" - Class: " + type.getName());
+				return null;
+			}
 			return OBJECT_MAPPER.readValue(data, type);
 		} catch (IOException e) {
 			logger.severe(String.format("Json processing failed for object: %s", type.getName()));

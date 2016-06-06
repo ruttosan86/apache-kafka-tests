@@ -39,9 +39,11 @@ public class TickAggregation {
 		long t = tick.getTime();
 		if(t > maxTs) {
 			out_prc = tick.getLast_prc();
+			maxTs = t;
 		}
 		if(t < minTs) {
 			in_prc = tick.getLast_prc();
+			minTs = t;
 		}
 		return this;
 	}

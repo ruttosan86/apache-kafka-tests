@@ -13,27 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package it.itsoftware.chartx.kafka.tests.data.serde;
 
-package it.itsoftware.chartx.kafka.tests.data.output;
+import it.itsoftware.chartx.kafka.tests.data.TickAggregation;
 
-import it.itsoftware.chartx.kafka.tests.data.Tick;
-
-public class ConsoleTickOutput implements TickOutput {
-
-	@Override
-	public void write(Tick tick) {
-		System.out.println(tick.toString());
-	}
-
-	@Override
-	public boolean open() {
-		return true;
-	}
-
-	@Override
-	public boolean close() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+public class TickAggregationJSONSerializer extends JSONSerializer<TickAggregation> {
 
 }

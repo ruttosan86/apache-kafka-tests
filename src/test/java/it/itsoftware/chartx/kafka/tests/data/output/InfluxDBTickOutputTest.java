@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 
 import java.util.logging.Logger;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.Test;
 
 import it.itsoftware.chartx.kafka.tests.data.Tick;
@@ -33,20 +34,20 @@ public class InfluxDBTickOutputTest {
 	@Test
 	public void test() {
 		TickSource source = new SimulatedTickSource(10);
-		TickOutput output = new InfluxDBTickOutput("http://localhost:8086", "root", "root", "dbkafkatest", "default",
-				"ticks");
+		Output<String, Tick> output = new InfluxDBTickOutput("http://localhost:8086", "root", "root", "dbkafkatest",
+				"default", "ticks");
 		((InfluxDBTickOutput) output).enableBatch(2000);
 		assertTrue(output.open());
 		logger.info("Tick output opened.");
 		assertTrue(source.open());
 		logger.info("Tick source opened.");
 		for (int i = 0; i < 100; i++) {
-			if (source.hasNext()) {
-				Tick next = source.next();
-				assertNotNull(next);
-				output.write(next);
-			}
+			Tick next = source.next();
+			assertNotNull(next);
+			ConsumerRecord<String, Tick> cr = new ConsumerRecord<String, Tick>("ticks", 0, 0, next.getTopic(), next);
+			output.write(cr);
 		}
+
 		assertTrue(output.close());
 		logger.info("Tick output closed.");
 		assertTrue(source.close());

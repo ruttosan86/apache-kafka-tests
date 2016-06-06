@@ -25,21 +25,20 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
 
-import it.itsoftware.chartx.kafka.tests.data.Tick;
-import it.itsoftware.chartx.kafka.tests.data.output.TickOutput;
+import it.itsoftware.chartx.kafka.tests.data.output.Output;
 
-public class KafkaTickConsumerRunner extends Thread {
+public class KafkaConsumerRunner<K, T> extends Thread {
 
 	private final AtomicBoolean closed = new AtomicBoolean(false);
-	private final KafkaConsumer<String, Tick> consumer;
-	private TickOutput output;
+	private final KafkaConsumer<K, T> consumer;
+	private Output<K, T> output;
 	private String sourceTopic;
 	
 	final static Logger logger = Logger.getLogger("KafkaTickConsumerRunner");
 	
-	public KafkaTickConsumerRunner(Properties props, TickOutput output, String sourceTopic) {
+	public KafkaConsumerRunner(Properties props, Output<K, T> output, String sourceTopic) {
 		super();
-		this.consumer = new KafkaConsumer<String, Tick>(props);
+		this.consumer = new KafkaConsumer<K, T>(props);
 		this.output = output;
 		this.sourceTopic = sourceTopic;
 	}
@@ -51,12 +50,11 @@ public class KafkaTickConsumerRunner extends Thread {
             consumer.subscribe(Arrays.asList(sourceTopic));
             output.open();
             while (!closed.get()) {
-            	ConsumerRecords<String, Tick> records = consumer.poll(250);
+            	ConsumerRecords<K, T> records = consumer.poll(250);
             	logger.info("Retrieved " + records.count() + " ticks.");
-            	for (ConsumerRecord<String, Tick> record : records) {
-            		Tick tick = record.value();
-            		if(tick != null) {
-            			output.write(tick);
+            	for (ConsumerRecord<K, T> record : records) {
+            		if(record.value() != null) {
+            			output.write(record);
             		}
             	}
             }
