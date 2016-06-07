@@ -41,7 +41,7 @@ public class TickAggregation implements InfluxDBExportable {
 		max_prc = Float.MIN_VALUE;
 		in_prc = null;
 		out_prc = null;
-		minTs = Long.MAX_VALUE;
+		minTs = 0;
 		maxTs = Long.MIN_VALUE;
 		num_trades = 0;
 		contract_count = 0;
