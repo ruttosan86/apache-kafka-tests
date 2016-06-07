@@ -26,6 +26,10 @@ import it.itsoftware.chartx.kafka.tests.data.output.Output;
 import it.itsoftware.chartx.kafka.tests.data.serde.TickAggregationJSONDeserializer;
 import it.itsoftware.chartx.kafka.tests.data.serde.WindowedStringDeserializer;
 
+/**
+ * @author ruttosan
+ *
+ */
 public class ConsumerMain {
 
 	public static void main(String[] args) throws InterruptedException {

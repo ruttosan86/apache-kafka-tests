@@ -51,6 +51,9 @@ public class InfluxDBOutput<K, T extends InfluxDBExportable> implements Output<K
 		this.batchSize = 1;
 	}
 
+	/* (non-Javadoc)
+	 * @see it.itsoftware.chartx.kafka.tests.data.output.Output#write(java.lang.Object)
+	 */
 	@Override
 	public void write(T record) {
 		if(closed) {

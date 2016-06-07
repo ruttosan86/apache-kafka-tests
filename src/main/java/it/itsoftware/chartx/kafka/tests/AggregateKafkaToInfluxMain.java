@@ -29,6 +29,9 @@ public class AggregateKafkaToInfluxMain {
 
 	final static Logger logger = Logger.getLogger("AggregateKafkaToInfluxMain");
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		String topic = "aggregateTicks";
 		final AtomicBoolean closed = new AtomicBoolean(false);

@@ -17,6 +17,12 @@
 package it.itsoftware.chartx.kafka.tests.data.output;
 
 
+/**
+ * @author ruttosan
+ *
+ * @param <K>
+ * @param <T>
+ */
 public interface Output<K, T> {
 
 	public void write(T record);
