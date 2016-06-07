@@ -16,17 +16,12 @@
 
 package it.itsoftware.chartx.kafka.tests.data.output;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public class ConsoleOutput<K, T> implements Output<K, T> {
 
 	@Override
-	public void write(ConsumerRecord<K, T> record) {
-		// System.out.println(record.toString());
-		System.out.println(record.key().toString());
-		System.out.println(record.timestamp());
-		System.out.println(record.value().toString());
-		// record.key() + ": " + record.timestamp() + " " +
+	public void write(T record) {
+		System.out.println(record.toString());
 	}
 
 	@Override
@@ -36,7 +31,6 @@ public class ConsoleOutput<K, T> implements Output<K, T> {
 
 	@Override
 	public boolean close() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

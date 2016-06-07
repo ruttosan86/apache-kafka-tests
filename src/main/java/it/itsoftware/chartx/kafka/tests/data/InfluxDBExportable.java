@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package it.itsoftware.chartx.kafka.tests.data.output;
+package it.itsoftware.chartx.kafka.tests.data;
 
+import org.influxdb.dto.Point;
 
-public interface Output<K, T> {
+public interface InfluxDBExportable {
 
-	public void write(T record);
-
-	public boolean open();
-
-	public boolean close();
-
+	public Point toPoint(String measurement);
+	
 }

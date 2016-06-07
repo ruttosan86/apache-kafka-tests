@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Point.Builder;
 
-public class Tick {
+public class Tick implements InfluxDBExportable {
 
 	/**
 	 * by Davide Soldi 01/06/2016 11:30 AM
@@ -127,6 +127,7 @@ public class Tick {
 	/**
 	 * INFLUXDB CONVERSION
 	 */
+	@Override
 	public Point toPoint(String measurement) {
 		return toPoint(this, measurement);
 	}
@@ -134,7 +135,7 @@ public class Tick {
 	public static Point toPoint(Tick tick, String measurement) {
 		Builder builder = Point.measurement(measurement);
 		builder.tag("topic", tick.topic);
-		builder.time(tick.getTime(), TimeUnit.NANOSECONDS);
+		builder.time(tick.getTime(), TimeUnit.MILLISECONDS);
 		builder.addField("contractId", tick.getContractId());
 		builder.addField("last_prc", tick.getLast_prc());
 		builder.addField("best_bid", tick.getBest_bid());

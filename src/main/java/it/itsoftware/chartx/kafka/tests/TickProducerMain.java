@@ -26,18 +26,18 @@ import it.itsoftware.chartx.kafka.tests.data.source.SimulatedTickSource;
 import it.itsoftware.chartx.kafka.tests.data.source.TickSource;
 import it.itsoftware.chartx.kafka.tests.producer.KafkaTickProducer;
 
-public class ProducerMain {
+public class TickProducerMain {
 
 	final static Logger logger = Logger.getLogger("ProducerMain");
 
 	public static void main(String[] args) {
 
 		String topic = "ticks";
-		TickSource source = new SimulatedTickSource(100);
+		TickSource source = new SimulatedTickSource(20);
 		KafkaTickProducer producer = new KafkaTickProducer(source, topic, KafkaTickProducer.defaultProperties());
-		int nMessages = 250;
+		int nMessages = 150;
 		boolean asyncSend = true;
-		int executionTime = 120; // time in seconds for data production
+		int executionTime = 15 * 60; // time in seconds for data production
 
 		Stopwatch exitTimer = Stopwatch.createStarted();
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);

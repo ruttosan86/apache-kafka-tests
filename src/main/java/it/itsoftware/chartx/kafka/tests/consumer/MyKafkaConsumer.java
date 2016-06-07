@@ -69,6 +69,10 @@ public class MyKafkaConsumer<K, T> {
 		
 	}
 	
+	public static <T1, T2> Properties defaultProperties(Class<T1> keyDeserializerClass, Class<T2> valueDeserializerClass) {
+		return defaultProperties(keyDeserializerClass.getCanonicalName(), valueDeserializerClass.getCanonicalName());
+	}
+	
 	public static Properties defaultProperties(String valueDeserializer) {
 		return defaultProperties("org.apache.kafka.common.serialization.StringDeserializer", valueDeserializer);
 	}

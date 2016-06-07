@@ -23,6 +23,8 @@ import it.itsoftware.chartx.kafka.tests.consumer.MyKafkaConsumer;
 import it.itsoftware.chartx.kafka.tests.data.TickAggregation;
 import it.itsoftware.chartx.kafka.tests.data.output.ConsoleOutput;
 import it.itsoftware.chartx.kafka.tests.data.output.Output;
+import it.itsoftware.chartx.kafka.tests.data.serde.TickAggregationJSONDeserializer;
+import it.itsoftware.chartx.kafka.tests.data.serde.WindowedStringDeserializer;
 
 public class ConsumerMain {
 
@@ -38,7 +40,8 @@ public class ConsumerMain {
 			output = new ConsoleOutput<Windowed<String>, TickAggregation>();
 //		}
 		if(output.open()) {
-			Properties props = MyKafkaConsumer.defaultProperties("it.itsoftware.chartx.kafka.tests.data.serde.WindowedStringDeserializer", "it.itsoftware.chartx.kafka.tests.data.serde.TickAggregationJSONDeserializer");
+			
+			Properties props = MyKafkaConsumer.defaultProperties(WindowedStringDeserializer.class, TickAggregationJSONDeserializer.class);
 			
 			MyKafkaConsumer<Windowed<String>, TickAggregation> consumer = new MyKafkaConsumer<Windowed<String>, TickAggregation>(props, topic, output);
 			if(consumer.start()) {

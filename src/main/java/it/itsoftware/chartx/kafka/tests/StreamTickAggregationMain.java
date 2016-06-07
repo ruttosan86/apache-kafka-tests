@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package it.itsoftware.chartx.kafka.tests;
 
-package it.itsoftware.chartx.kafka.tests.data.output;
+import it.itsoftware.chartx.kafka.tests.stream.TickAggregationStream;
 
+public class StreamTickAggregationMain {
 
-public interface Output<K, T> {
+	public static void main(String[] args) throws InterruptedException {
 
-	public void write(T record);
+		TickAggregationStream aggregationStream = new TickAggregationStream(TickAggregationStream.defaultProperties());
 
-	public boolean open();
+		if (aggregationStream.start()) {
+			Thread.sleep(15L * 60L * 1000L);
+			aggregationStream.close();
+		}
 
-	public boolean close();
+	}
 
 }

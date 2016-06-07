@@ -1,7 +1,29 @@
+/*
+ * Copyright 2016 Davide Soldi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.itsoftware.chartx.kafka.tests.data;
 
-public class TickAggregation {
+import java.util.concurrent.TimeUnit;
 
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Point.Builder;
+
+public class TickAggregation implements InfluxDBExportable {
+
+	private Long time;
 	private Float min_prc;
 	private Float max_prc;
 	private Float in_prc;
@@ -14,6 +36,7 @@ public class TickAggregation {
 
 	public TickAggregation() {
 		super();
+		time = 0L;
 		min_prc = Float.MAX_VALUE;
 		max_prc = Float.MIN_VALUE;
 		in_prc = null;
@@ -48,12 +71,7 @@ public class TickAggregation {
 		return this;
 	}
 
-	@Override
-	public String toString() {
-		return "TickAggregation [min_prc=" + min_prc + ", max_prc=" + max_prc + ", in_prc=" + in_prc + ", out_prc="
-				+ out_prc + ", num_trades=" + num_trades + ", contract_count=" + contract_count + ", topic=" + topic
-				+ "]";
-	}
+	
 
 	public Float getMin_prc() {
 		return min_prc;
@@ -110,5 +128,39 @@ public class TickAggregation {
 	public void setOut_prc(Float out_prc) {
 		this.out_prc = out_prc;
 	}
+	
+	public Long getTime() {
+		return time;
+	}
+
+	public void setTime(Long time) {
+		this.time = time;
+	}
+
+	@Override
+	public Point toPoint(String measurement) {
+		return toPoint(this, measurement);
+	}
+	
+	public static Point toPoint(TickAggregation tick, String measurement) {
+		Builder builder = Point.measurement(measurement);
+		builder.tag("topic", tick.topic);
+		builder.time(tick.getTime(), TimeUnit.MILLISECONDS);
+		builder.addField("min_prc", tick.min_prc);
+		builder.addField("max_prc", tick.max_prc);
+		builder.addField("in_prc", tick.in_prc);
+		builder.addField("out_prc", tick.out_prc);
+		builder.addField("num_trades", tick.num_trades);
+		builder.addField("contract_count", tick.contract_count);
+		return builder.build();
+	}
+
+	@Override
+	public String toString() {
+		return "TickAggregation [time=" + time + ", min_prc=" + min_prc + ", max_prc=" + max_prc + ", in_prc=" + in_prc
+				+ ", out_prc=" + out_prc + ", num_trades=" + num_trades + ", contract_count=" + contract_count
+				+ ", topic=" + topic + "]";
+	}
+	
 
 }

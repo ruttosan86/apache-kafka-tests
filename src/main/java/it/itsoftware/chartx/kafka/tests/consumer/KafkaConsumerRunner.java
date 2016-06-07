@@ -54,7 +54,7 @@ public class KafkaConsumerRunner<K, T> extends Thread {
             	logger.info("Retrieved " + records.count() + " ticks.");
             	for (ConsumerRecord<K, T> record : records) {
             		if(record.value() != null) {
-            			output.write(record);
+            			output.write(record.value());
             		}
             	}
             }

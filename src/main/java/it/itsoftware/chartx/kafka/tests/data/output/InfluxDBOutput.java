@@ -21,23 +21,23 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
-import it.itsoftware.chartx.kafka.tests.data.Tick;
+import it.itsoftware.chartx.kafka.tests.data.InfluxDBExportable;
 
 
-public class InfluxDBTickOutput implements Output<String, Tick> {
+public class InfluxDBOutput<K, T extends InfluxDBExportable> implements Output<K, T> {
 
-	private InfluxDB db;
+	protected InfluxDB db;
 	private String dbURL;
 	private String dbUser;
 	private String dbPassword;
-	private String destinationDatabase;
-	private String destinationRP;
-	private String destinationMeasurement;
+	protected String destinationDatabase;
+	protected String destinationRP;
+	protected String destinationMeasurement;
 	private boolean batchEnabled;
 	private int batchSize;
 	private boolean closed;
 
-	public InfluxDBTickOutput(String dbURL, String dbUser, String dbPassword, String destinationDatabase,
+	public InfluxDBOutput(String dbURL, String dbUser, String dbPassword, String destinationDatabase,
 			String destinationRP, String destinationMeasurement) {
 		super();
 		this.dbURL = dbURL;
@@ -52,11 +52,11 @@ public class InfluxDBTickOutput implements Output<String, Tick> {
 	}
 
 	@Override
-	public void write(ConsumerRecord<String,Tick> record) {
+	public void write(T record) {
 		if(closed) {
 			open();
 		}
-		db.write(destinationDatabase, destinationRP, record.value().toPoint(destinationMeasurement));
+		db.write(destinationDatabase, destinationRP, record.toPoint(destinationMeasurement));
 	}
 
 	@Override
@@ -94,5 +94,10 @@ public class InfluxDBTickOutput implements Output<String, Tick> {
 			return false;
 		}
 	}
+
+	public boolean isClosed() {
+		return closed;
+	}
+
 
 }
