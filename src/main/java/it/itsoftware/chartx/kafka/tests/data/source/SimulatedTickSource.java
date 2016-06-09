@@ -35,23 +35,29 @@ public class SimulatedTickSource implements TickSource {
 	
 	private int nTopics;
 	private Random random;
+	private long nanos;
 	
 	public SimulatedTickSource(int nTopics) {
 		this.nTopics = nTopics;
-		random = new Random(42L); 
+		random = new Random(42L);
+		nanos = 0;
 	}
 
 	@Override
 	public Tick next() {
 		String contractId = UUID.randomUUID().toString();
-		String topic = "TIT." + random.nextInt(nTopics) + ".SIM";
+		String topic = "TIT." + random.nextInt(nTopics);
+		String market = "SIM";
 		Float last_prc = newPrice();
 		Integer trade_num = newTradeNum();
 		Float best_ask = newPrice();
 		Long time = Instant.now().toEpochMilli(); //MILLISECOND TIMESTAMP
+		time = time * 1000000;
+		time += (nanos%1000000);
+		nanos++;
 		Float best_bid = newPrice();
 		Boolean automatic_type = newAutomaticType();
-		Tick t = new Tick(topic, time, contractId, last_prc, best_bid, best_ask, trade_num, automatic_type);
+		Tick t = new Tick(topic, market, time, contractId, last_prc, best_bid, best_ask, trade_num, automatic_type);
 		return t;
 	}
 	

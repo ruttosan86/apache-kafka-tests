@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 import com.google.common.base.Stopwatch;
 
-import it.itsoftware.chartx.kafka.tests.data.source.SimulatedTickSource;
+import it.itsoftware.chartx.kafka.tests.data.source.SimulatedSmartTickSource;
 import it.itsoftware.chartx.kafka.tests.data.source.TickSource;
 import it.itsoftware.chartx.kafka.tests.producer.KafkaTickProducer;
 
@@ -33,9 +33,10 @@ public class TickProducerMain {
 	public static void main(String[] args) {
 
 		String topic = "ticks";
-		TickSource source = new SimulatedTickSource(20);
+		TickSource source = new SimulatedSmartTickSource(100, 1000, 10);
+		((SimulatedSmartTickSource) source).randomize();
 		KafkaTickProducer producer = new KafkaTickProducer(source, topic, KafkaTickProducer.defaultProperties());
-		int nMessages = 150;
+		int nMessages = 300;
 		boolean asyncSend = true;
 		int executionTime = 15 * 60; // time in seconds for data production
 

@@ -17,7 +17,6 @@ package it.itsoftware.chartx.kafka.tests.data.output;
 
 import java.util.concurrent.TimeUnit;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
@@ -51,6 +50,21 @@ public class InfluxDBOutput<K, T extends InfluxDBExportable> implements Output<K
 		this.batchSize = 1;
 	}
 
+	
+	public boolean createDatabase() {
+		if(isClosed()) {
+			if(!open()) {
+				return false;
+			}
+		}
+		for(String dbN:db.describeDatabases()) {
+			if(dbN.equals(destinationDatabase))
+				return true;
+		}
+		db.createDatabase(destinationDatabase);
+		return true;
+	}
+	
 	/* (non-Javadoc)
 	 * @see it.itsoftware.chartx.kafka.tests.data.output.Output#write(java.lang.Object)
 	 */

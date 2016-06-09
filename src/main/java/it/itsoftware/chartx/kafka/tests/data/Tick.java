@@ -28,6 +28,7 @@ public class Tick implements InfluxDBExportable {
 	 */
 
 	private String topic;
+	private String market;
 	private Long time;
 	private String contractId;
 	private Float last_prc;
@@ -40,10 +41,11 @@ public class Tick implements InfluxDBExportable {
 		super();
 	}
 
-	public Tick(String topic, Long time, String contractId, Float last_prc, Float best_bid, Float best_ask,
-			Integer trade_num, Boolean automatic_type) {
+	public Tick(String topic, String market, Long time, String contractId, Float last_prc, Float best_bid,
+			Float best_ask, Integer trade_num, Boolean automatic_type) {
 		super();
 		this.topic = topic;
+		this.market = market;
 		this.time = time;
 		this.contractId = contractId;
 		this.last_prc = last_prc;
@@ -117,11 +119,19 @@ public class Tick implements InfluxDBExportable {
 		this.automatic_type = automatic_type;
 	}
 
+	public String getMarket() {
+		return market;
+	}
+
+	public void setMarket(String market) {
+		this.market = market;
+	}
+
 	@Override
 	public String toString() {
-		return "Tick [topic=" + topic + ", time=" + time + ", contractId=" + contractId + ", last_prc=" + last_prc
-				+ ", best_bid=" + best_bid + ", best_ask=" + best_ask + ", trade_num=" + trade_num + ", automatic_type="
-				+ automatic_type + "]";
+		return "Tick [topic=" + topic + ", market=" + market + ", time=" + time + ", contractId=" + contractId
+				+ ", last_prc=" + last_prc + ", best_bid=" + best_bid + ", best_ask=" + best_ask + ", trade_num="
+				+ trade_num + ", automatic_type=" + automatic_type + "]";
 	}
 
 	/**
@@ -135,7 +145,8 @@ public class Tick implements InfluxDBExportable {
 	public static Point toPoint(Tick tick, String measurement) {
 		Builder builder = Point.measurement(measurement);
 		builder.tag("topic", tick.topic);
-		builder.time(tick.getTime(), TimeUnit.MILLISECONDS);
+		builder.tag("market", tick.market);
+		builder.time(tick.getTime(), TimeUnit.NANOSECONDS);
 		builder.addField("contractId", tick.getContractId());
 		builder.addField("last_prc", tick.getLast_prc());
 		builder.addField("best_bid", tick.getBest_bid());

@@ -1,7 +1,6 @@
 package it.itsoftware.chartx.kafka.tests;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Properties;
@@ -45,7 +44,7 @@ public class AggregateKafkaToInfluxMain {
 				TickAggregationJSONDeserializer.class);
 
 		Long tmp = getCurrentMinute();
-		tmp -= (60 * 1000);
+		tmp -= (60L * 1000L * 1000000L);
 		AtomicLong queryMinute = new AtomicLong(tmp);
 
 		Runnable aggregateConsumerThread = () -> {
@@ -81,26 +80,24 @@ public class AggregateKafkaToInfluxMain {
 		Runnable influxDbOutThread = () -> {
 			logger.info("Working on updating influx!");
 			Long time = queryMinute.get();
-			System.out.println(Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()));
+			System.out.println(Instant.ofEpochMilli(time/1000000).atZone(ZoneId.systemDefault()));
 			ConcurrentHashMap<String, TickAggregation> window = bucket.get(time);
 			if (window != null) {
 				logger.info("Writing " + window.size() + " aggregates");
 				window.forEach((k, v) -> {
 					v.setTime(time);
-					output.write(v);
+//					output.write(v);
 					System.out.println(v.toString());
 				});
 				bucket.remove(time);
 			}
-			queryMinute.addAndGet(60L * 1000L);
+			queryMinute.addAndGet(60L * 1000L * 1000000L);
 		};
 
 		new Thread(aggregateConsumerThread).start();
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(influxDbOutThread, 0, 60, TimeUnit.SECONDS);
-		
-		
 
 	}
 
@@ -108,7 +105,7 @@ public class AggregateKafkaToInfluxMain {
 		Long currentMinute = Instant.now().toEpochMilli();
 		long tmp = currentMinute % (60 * 1000);
 		currentMinute -= tmp;
-		return currentMinute;
+		return currentMinute * 1000000L;
 	}
 
 }

@@ -33,7 +33,7 @@ public class TickAggregationStream {
 		KStreamBuilder builder = new KStreamBuilder();
 		KStream<String, Tick> ticks = builder.stream(stringSerde, tickSerde, tickTopic);
 		KTable<Windowed<String>, TickAggregation> aggregates = ticks.aggregateByKey(TickAggregation::new,
-				(topic, tick, aggregate) -> aggregate.add(tick), TimeWindows.of("minute_window", 1L * 60L * 1000L),
+				(topic, tick, aggregate) -> aggregate.add(tick), TimeWindows.of("minute_window", 1L * 60L * 1000L * 1000000L),
 				stringSerde, aggregateSerde);
 		aggregates.toStream().to(new WindowedStringSerde(), aggregateSerde, aggregateTopic);
 		streams = new KafkaStreams(builder, props);

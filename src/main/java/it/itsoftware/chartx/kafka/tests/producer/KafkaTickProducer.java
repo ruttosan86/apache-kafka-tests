@@ -87,7 +87,7 @@ public class KafkaTickProducer {
 		// new ProducerRecord<String, Tick>(destinationTopic, tick.getTopic(),
 		// tick);
 		ProducerRecord<String, Tick> record = new ProducerRecord<>(destinationTopic, null, tick.getTime(),
-				tick.getTopic(), tick);
+				tick.getTopic() + "." + tick.getMarket(), tick);
 		producer.send(record, (meta, error) -> {
 			if (error != null) {
 				logger.severe("Unable to send tick:\n" + error.getMessage());

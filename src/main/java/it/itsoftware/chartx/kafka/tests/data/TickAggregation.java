@@ -27,9 +27,7 @@ public class TickAggregation implements InfluxDBExportable {
 	private Float min_prc;
 	private Float max_prc;
 	private Float in_prc;
-	private long minTs;
 	private Float out_prc;
-	private long maxTs;
 	private Integer num_trades;
 	private Integer contract_count;
 	private String topic;
@@ -41,15 +39,14 @@ public class TickAggregation implements InfluxDBExportable {
 		max_prc = Float.MIN_VALUE;
 		in_prc = null;
 		out_prc = null;
-		minTs = 0;
-		maxTs = Long.MIN_VALUE;
 		num_trades = 0;
 		contract_count = 0;
 	}
 
 	public TickAggregation add(Tick tick) {
 		if (topic == null) {
-			topic = tick.getTopic();
+			topic = tick.getTopic() + "." + tick.getMarket();
+			in_prc = tick.getLast_prc();
 		}
 		contract_count++;
 		num_trades += tick.getTrade_num();
@@ -59,19 +56,9 @@ public class TickAggregation implements InfluxDBExportable {
 		if (tick.getLast_prc() < min_prc) {
 			min_prc = tick.getLast_prc();
 		}
-		long t = tick.getTime();
-		if(t > maxTs) {
-			out_prc = tick.getLast_prc();
-			maxTs = t;
-		}
-		if(t < minTs) {
-			in_prc = tick.getLast_prc();
-			minTs = t;
-		}
+		out_prc = tick.getLast_prc();
 		return this;
 	}
-
-	
 
 	public Float getMin_prc() {
 		return min_prc;
@@ -128,7 +115,7 @@ public class TickAggregation implements InfluxDBExportable {
 	public void setOut_prc(Float out_prc) {
 		this.out_prc = out_prc;
 	}
-	
+
 	public Long getTime() {
 		return time;
 	}
@@ -141,7 +128,7 @@ public class TickAggregation implements InfluxDBExportable {
 	public Point toPoint(String measurement) {
 		return toPoint(this, measurement);
 	}
-	
+
 	public static Point toPoint(TickAggregation tick, String measurement) {
 		Builder builder = Point.measurement(measurement);
 		builder.tag("topic", tick.topic);
@@ -161,6 +148,5 @@ public class TickAggregation implements InfluxDBExportable {
 				+ ", out_prc=" + out_prc + ", num_trades=" + num_trades + ", contract_count=" + contract_count
 				+ ", topic=" + topic + "]";
 	}
-	
 
 }

@@ -34,9 +34,9 @@ public class InfluxDBTickOutputTest {
 	@Test
 	public void test() {
 		TickSource source = new SimulatedTickSource(10);
-		Output<String, Tick> output = new InfluxDBOutput("http://localhost:8086", "root", "root", "dbkafkatest",
+		Output<String, Tick> output = new InfluxDBOutput<String, Tick>("http://localhost:8086", "root", "root", "dbkafkatest",
 				"default", "ticks");
-		((InfluxDBOutput) output).enableBatch(2000);
+		((InfluxDBOutput<String, Tick>) output).enableBatch(2000);
 		assertTrue(output.open());
 		logger.info("Tick output opened.");
 		assertTrue(source.open());
