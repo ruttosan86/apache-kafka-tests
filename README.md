@@ -1,3 +1,5 @@
+*** 06-09-2016 This README needs to be updated ;D
+
 # apache-kafka-tests
 
 First attempts at using apache kafka (consumers-producers-streams)
