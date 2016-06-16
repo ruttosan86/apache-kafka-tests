@@ -16,9 +16,9 @@ public class InfluxDBSeriesLoadTest {
 	public static void main(String[] args) {
 
 		int nSeries = 500000;
-		int nPotentialSeries = 50000000;
-		int nTopics = 50000;
-		AtomicInteger rate = new AtomicInteger(11000);
+		int nPotentialSeries = 500000000;
+		int nTopics = 5000;
+		AtomicInteger rate = new AtomicInteger(100);
 		boolean randomize = false;
 		if (args.length < 4) {
 			System.out.println(

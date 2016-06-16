@@ -17,6 +17,7 @@ package it.itsoftware.chartx.kafka.tests;
 
 import java.util.Properties;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.streams.kstream.Windowed;
 
 import it.itsoftware.chartx.kafka.tests.consumer.MyKafkaConsumer;
@@ -46,6 +47,7 @@ public class ConsumerMain {
 		if(output.open()) {
 			
 			Properties props = MyKafkaConsumer.defaultProperties(WindowedStringDeserializer.class, TickAggregationJSONDeserializer.class);
+			
 			
 			MyKafkaConsumer<Windowed<String>, TickAggregation> consumer = new MyKafkaConsumer<Windowed<String>, TickAggregation>(props, topic, output);
 			if(consumer.start()) {

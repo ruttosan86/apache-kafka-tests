@@ -33,7 +33,6 @@ public class KafkaConsumerRunner<K, T> extends Thread {
 	private final KafkaConsumer<K, T> consumer;
 	private Output<K, T> output;
 	private String sourceTopic;
-	
 	final static Logger logger = Logger.getLogger("KafkaTickConsumerRunner");
 	
 	public KafkaConsumerRunner(Properties props, Output<K, T> output, String sourceTopic) {

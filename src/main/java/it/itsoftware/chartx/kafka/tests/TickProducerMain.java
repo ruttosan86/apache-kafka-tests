@@ -33,10 +33,10 @@ public class TickProducerMain {
 	public static void main(String[] args) {
 
 		String topic = "ticks";
-		TickSource source = new SimulatedSmartTickSource(100, 1000, 10);
+		TickSource source = new SimulatedSmartTickSource(10, 100, 10);
 		((SimulatedSmartTickSource) source).randomize();
 		KafkaTickProducer producer = new KafkaTickProducer(source, topic, KafkaTickProducer.defaultProperties());
-		int nMessages = 300;
+		int nMessages = 25;
 		boolean asyncSend = true;
 		int executionTime = 15 * 60; // time in seconds for data production
 

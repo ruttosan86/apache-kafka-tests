@@ -1,5 +1,6 @@
 package it.itsoftware.chartx.kafka.tests.stream;
 
+import java.time.Instant;
 import java.util.Properties;
 
 import org.apache.kafka.common.serialization.Serde;
@@ -11,6 +12,8 @@ import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.kstream.Windowed;
+
+import com.google.common.base.Stopwatch;
 
 import it.itsoftware.chartx.kafka.tests.data.Tick;
 import it.itsoftware.chartx.kafka.tests.data.TickAggregation;
@@ -35,7 +38,10 @@ public class TickAggregationStream {
 		KTable<Windowed<String>, TickAggregation> aggregates = ticks.aggregateByKey(TickAggregation::new,
 				(topic, tick, aggregate) -> aggregate.add(tick), TimeWindows.of("minute_window", 1L * 60L * 1000L * 1000000L),
 				stringSerde, aggregateSerde);
-		aggregates.toStream().to(new WindowedStringSerde(), aggregateSerde, aggregateTopic);
+		aggregates.toStream().to(new WindowedStringSerde(), aggregateSerde, aggregateTopic);	
+		 
+		
+		
 		streams = new KafkaStreams(builder, props);
 	}
 
@@ -62,7 +68,7 @@ public class TickAggregationStream {
 	public static Properties defaultProperties(String timestampExtractorClass) {
 		Properties props = new Properties();
 		props.put(StreamsConfig.CLIENT_ID_CONFIG, "tick-minute-aggregation-stream");
-		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "tick-aggregator-1");
+		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "tick-aggregator-v-0.0.1");
 		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9192");
 		props.put(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, "localhost:2181");
 		props.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
