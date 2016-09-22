@@ -16,7 +16,6 @@
 
 package it.itsoftware.chartx.kafka.tests.data.output;
 
-
 /**
  * @author ruttosan
  *

@@ -20,6 +20,7 @@ To use you'll need:
 	tar -xzf kafka_2.11-0.10.0.0.tgz
 	cd kafka_2.11-0.10.0.0
 	
+	
 #### Launch zookeeper
 
 	bin/zookeeper-server-start.sh config/zookeeper.properties
